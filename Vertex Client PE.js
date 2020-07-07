@@ -6800,7 +6800,7 @@ var expGiver = {
 var triggerTime2 = 3;
 var triggerBot = {
 	name: "TriggerBot",
-	desc: i18n("Hits an entity if you aim at it. Possibly only works in singleplayer."),
+	desc: i18n("Hits an entity if you aim at it."),
 	category: VertexClientPE.category.COMBAT,
 	type: "Mod",
 	state: false,
