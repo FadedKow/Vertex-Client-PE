@@ -1233,6 +1233,18 @@ let VertexClientPE = {
 				}
 			}).start();
 		},
+		simulateAttack: function() {
+			new Thread_(new Runnable_() {
+				run: function() {
+					try {
+						let instrument = new Instrumentation_;
+						instrument.sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_Q);
+					} catch(e) {
+						VertexClientPE.showBugReportDialog(e);
+					}
+				}
+			}).start();
+		},
 		Block: { //thanks to GodSoft029
 			isLiquid: function (id) {
 				if(id >= 8 && id <= 11) return true;
@@ -3190,8 +3202,9 @@ var flight = {
 	},
 	onToggle: function() {
 		this.state = !this.state;
-		Player.setFlying(this.state?1:0);
-		Player.setCanFly(this.state?1:Level.getGameMode());
+		/*Player.setFlying(this.state?1:0);
+		Player.setCanFly(this.state?1:Level.getGameMode());*/
+		//Removing the stuff above makes the client compatible with other clients.
 	},
 	onTick: function() {
 		Player.setFlying(1);
@@ -6784,6 +6797,7 @@ var expGiver = {
 	}
 }
 
+var triggerTime2 = 3;
 var triggerBot = {
 	name: "TriggerBot",
 	desc: i18n("Hits an entity if you aim at it. Possibly only works in singleplayer."),
@@ -6798,11 +6812,16 @@ var triggerBot = {
 	},
 	onTick: function() {
 		if(VertexClientPE.CombatUtils.isAimingAtEnt()) {
-			VertexClientPE.Utils.simulateKeyDownUp(135);
+			triggerTime2--;
+      if(triggerTime2 == 0){
+        VertexClientPE.Utils.simulateAttack();
+        triggerTime2 = 3;
+      }
 		}
 	}
 }
 
+var clickerTime2 = 3;
 var autoTapper = {
 	name: "AutoTapper",
 	desc: i18n("Automatically taps/clicks the screen."),
@@ -6816,7 +6835,11 @@ var autoTapper = {
 		this.state = !this.state;
 	},
 	onTick: function() {
-		VertexClientPE.Utils.simulateKeyDownUp(135);
+		clickerTime2--;
+     if (clickerTime2 == 0) {
+		VertexClientPE.Utils.simulateAttack();
+   clickerTime2 = 3;
+}
 	}
 }
 
