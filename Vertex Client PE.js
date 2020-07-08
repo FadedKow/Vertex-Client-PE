@@ -3202,8 +3202,8 @@ var flight = {
 	},
 	onToggle: function() {
 		this.state = !this.state;
-		/*Player.setFlying(this.state?1:0);
-		Player.setCanFly(this.state?1:Level.getGameMode());*/
+		Player.setFlying(this.state?1:0);
+		Player.setCanFly(this.state?1:Level.getGameMode());
 		//Removing the stuff above makes the client compatible with other clients.
 	},
 	onTick: function() {
@@ -3982,6 +3982,25 @@ var zoom = {
 	onToggle: function() {
 		this.state = !this.state;
 		this.state?ModPE.setFov(10):ModPE.resetFov();
+	}
+}
+
+var file = {            select:function(dir, fileName)            {            return (new File(dir, fileName));            },            exists:function(selectedFile)            {            return selectedFile.exists();            },            isFile:function(file)            {            return file.isFile();            },            isDirectory:function(path)            {            return path.isDirectory();            },            create:function(selectedFile)            {            selectedFile.createNewFile();            return selectedFile;            },            del:function(selectedFile)            {            selectedFile.delete();            },            read:function(selectedFile)            {            var readed = (new BufferedReader(new FileReader(selectedFile)));            var data = new StringBuilder();            var string;            while((string = readed.readLine()) != null){            data.append(string);            data.append('\n');            }            return data.toString();            },            readLine:function(selectedFile, line)            {            var readT = new file.read(selectedFile);            var lineArray = readT.split('\n');            return lineArray[line - 1];            },            readKey:function(selectedFile, key, keySeparator)            {            var isText = 0;            var textR = new file.read(selectedFile);            var splitTextR = textR.split('\n');            for(var i = 0; i < splitTextR.length; i++)            {            var textRF = splitTextR[i].split(keySeparator);            if(textRF[0] == key)            {            return textRF[1];            isText = 1;            break;            }            if(!isText)            {            return '[Unknown]';            }            }            },            write:function(selectedFile, text)            {            file.rewrite(selectedFile, (new file.read(selectedFile)) + text);            },            rewrite:function(selectedFile, text)            {            var writeFOS = new FOS(selectedFile);            writeFOS.write(new java.lang.String(text).getBytes());            },            writeKey:function(selectedFile, key, keyText, keySeparator)            {            var isText = 0;            var textR = new file.read(selectedFile);            var splitTextR = textR.split('');            for(var i = 0; i < splitTextR.length; i++)            {            var textRF = splitTextR[i].split(keySeparator);            if(textRF[0] == key)            {            var splitWithKey = textR.split(key + keySeparator + new file.readKey(selectedFile, key));            file.rewrite(selectedFile, splitWithKey[0] + key + keySeparator + keyText + splitWithKey[1]);            isText = 1;break;            }            }            if(!isText)            {            file.write(selectedFile, key + keySeparator + keyText);            }            },            mPlay:function(musicPath)            {            MediaPlayer.setDataSource(musicPath);            MediaPlayer.prepare();            MediaPlayer.start();            },            mStop:function()            {            MediaPlayer.reset();            }            };
+function rand(min, max){	return Math.floor(Math.random() * (max - min + 1)) + min;}
+var cidchange = {
+	name: "ChangeCID",
+	desc: i18n("Changes your CID (Client ID)."),
+	category: VertexClientPE.category.MISC,
+	type: "Mod",
+	state: false,
+	isStateMod: function() {
+		return true;
+	},
+	onToggle: function() {
+		this.state = !this.state;
+		var cid = file.select(sdcard + '/games/com.mojang/minecraftpe','clientId.txt');
+	  file.rewrite(cid, rand(1111111111111111111, 9999999999999999999));
+	  VertexClientPE.toast("CID Changed");
 	}
 }
 
@@ -7001,6 +7020,7 @@ VertexClientPE.registerModule(teleport);
 //VertexClientPE.registerModule(tracers);
 VertexClientPE.registerModule(watermark);
 VertexClientPE.registerModule(zoom);
+VertexClientPE.registerModule(cidchange);
 
 //var autoClick = true;
 function modTick() {
