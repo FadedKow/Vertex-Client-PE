@@ -6213,7 +6213,10 @@ var bunnyHop = {
 		this.tick = 0;
 	},
 	onTick: function() {
-		if(Player.isFlying()) {
+		if(!VertexClientPE.Utils.Player.onGround()){
+			setVelY(getPlayerEnt(), 0.30);
+		}
+		/*if(Player.isFlying()) {
 			this.tick = 0;
 			return;
 		}
@@ -6232,7 +6235,7 @@ var bunnyHop = {
 				Entity.setVelY(getPlayerEnt(), 0);
 				this.tick = 0;
 			}
-		}
+		}*/
 	}
 }
 
