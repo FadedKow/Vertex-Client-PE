@@ -3204,7 +3204,7 @@ var flight = {
 		this.state = !this.state;
 		Player.setFlying(this.state?1:0);
 		Player.setCanFly(this.state?1:Level.getGameMode());
-		//Removing the stuff above makes the client compatible with other clients.
+		//Removing the stuff above (excluding this.state) makes the client compatible with other clients.
 	},
 	onTick: function() {
 		Player.setFlying(1);
